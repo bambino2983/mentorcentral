@@ -1,0 +1,47 @@
+{% extends 'main.html' %} {% block content %}
+
+<style>
+  .home-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+  }
+</style>
+
+<div class="home-container">
+  <div>
+    <h3>Browse Topics</h3>
+
+    <hr />
+
+    <div>
+      <a href="{%  url 'home' %}">All</a>
+    </div>
+    {% for topic in topics %}
+    <div>
+      <a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div>
+    <h5>{{kb_count}} Documentos disponibles</h5>
+    <a href="{% url 'create-kb' %}">Crear KB</a>
+    <div>
+      {% for kb in kbs %}
+      <div>
+        <a href="{% url 'update-kb' kb.id %}">Edit</a>
+        <a href="{% url 'delete-kb' kb.id %}">Borrar</a>
+        <span></span>
+        <h3>{{kb.id}} -- <a href="{% url 'kb' kb.id %}">{{kb.name}}</a></h3>
+        <div class="body">{{kb.description|safe}}</div>
+        <small>{{ kb.category.name }}</small>
+        <br />
+        <small>{{ kb.updated }}</small>
+        <hr />
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

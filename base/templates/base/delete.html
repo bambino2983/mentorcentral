@@ -1,0 +1,12 @@
+{% extends 'main.html' %} {% block content %}
+
+<div>
+  <form method="POST" action="">
+    {% csrf_token %} {{form.media}} {{form.as_p}}
+    <p>Estas Seguro de Borrar "{{obj}}"</p>
+    <a href="{{ request.META.HTTP_REFERER }}">Atras</a>
+    <input type="submit" value="Confirm" />
+  </form>
+</div>
+
+{% endblock content %}
