@@ -1,1 +1,1 @@
-web: gunicorn mentorcentral.wsgi --log-file -
+web: gunicorn mentorcentral.wsgi 
