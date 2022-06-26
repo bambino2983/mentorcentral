@@ -24,4 +24,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: ssh jquiroz@${{ secrets.HOST }}
+        script: hostname
