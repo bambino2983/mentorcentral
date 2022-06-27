@@ -46,7 +46,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: mentorcentral:latest
+        tags: bambino29/mentorcentral:latest
 
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
