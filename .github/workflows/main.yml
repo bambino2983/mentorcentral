@@ -33,6 +33,7 @@ jobs:
       run: |
         python manage.py makemigrations --noinput
         python manage.py migrate --noinput
+        python manage.py runserver
 
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
