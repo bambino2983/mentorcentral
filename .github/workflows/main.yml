@@ -56,8 +56,8 @@ jobs:
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          sudo docker kill $(docker ps -q)
-          sudo docker rm $(docker ps -q -f status=exited)
-          sudo docker rmi -f $(docker images -aq)
-          sudo docker pull bambino29/mentorcentral:latest
-          sudo docker run -d -p 8000:8000 bambino29/mentorcentral:latest
+          docker kill $(docker ps -q)
+          docker rm $(docker ps -q -f status=exited)
+          docker rmi -f $(docker images -aq)
+          docker pull bambino29/mentorcentral:latest
+          docker run -d -p 8000:8000 bambino29/mentorcentral:latest
