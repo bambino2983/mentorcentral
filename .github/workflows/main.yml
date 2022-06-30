@@ -55,4 +55,9 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
-        script: hostname
+        script: |
+          docker kill $(docker ps -q)
+          docker rm $(docker ps -q -f status=exited)
+          docker rmi -f $(docker images -aq)
+          docker pull bambino29/mentorcentral:latest
+          docker run -d -p 8000:8000 bambino29/mentorcentral:latest
