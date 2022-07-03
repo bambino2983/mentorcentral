@@ -29,9 +29,11 @@
     <div>
       {% for kb in kbs %}
       <div>
+        {% if request.user == kb.creator %}
         <a href="{% url 'update-kb' kb.id %}">Edit</a>
         <a href="{% url 'delete-kb' kb.id %}">Borrar</a>
-        <span></span>
+        {% endif %}
+        <span> {{ kb.creator }} </span>
         <h3>{{kb.id}} -- <a href="{% url 'kb' kb.id %}">{{kb.name}}</a></h3>
         <div class="body">{{kb.description|safe}}</div>
         <small>{{ kb.category.name }}</small>
