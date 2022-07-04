@@ -1,5 +1,26 @@
 {% extends 'main.html' %} {% block content %}
 <h1>{{kb.name}}</h1>
-<h5>{{kb.description|safe}}</h5>
+<p>{{kb.description|safe}}</p>
 
+<div class="comment-wrapper">
+    <h3>FeedBack</h3>
+    <hr>
+
+    {% for kb_message in kb_messages %}
+        <div>
+            <div class="body">{{kb_message.description|safe}}
+            </div>
+            <small>{{kb_message.user}} {{kb_message.created|timesince}}</small>
+        
+    {% endfor %}
+</div>
+
+{% if request.user.is_authenticated %}
+<div class="comment-form">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="text" name="description" placeholder="Write your Comment Here">
+    </form>
+</div>
+{% endif %}
 {% endblock content %}
