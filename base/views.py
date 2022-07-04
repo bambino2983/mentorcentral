@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
-from  .models import Kb, Category
+from  .models import Kb, Category, Message, User
 from .forms import KbForm
 
 
@@ -67,14 +67,14 @@ def home(request):
 
 
 def kb(request, pk):
-    kb = Kb.objects.get (id=pk)  
-    kb_messages = kb.message_set.all()
-    context = {'kb': kb, 'kb_messages': messages}
+    kb = Kb.objects.get(id=pk)  
+    kb_messages = kb.message_set.all().order_by('-created')
+    context = {'kb': kb, 'kb_messages': kb_messages}
     return render(request, 'base/kb.html', context)
 
 @login_required(login_url='login')
 def createKb(request):
-    form = KbForm()
+    form = KbForm() 
     if request.method == "POST":
         form = KbForm(request.POST)
         if form.is_valid():
