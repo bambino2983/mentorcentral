@@ -15,6 +15,7 @@ class Kb(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=200)
     description = RichTextField(null=True)
+    partners = models.ManyToManyField(User, related_name='partners', blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -31,6 +32,9 @@ class Message(models.Model):
     description = RichTextField(null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-updated', '-created']
 
     def __str__(self):
         return self.description[0:50]

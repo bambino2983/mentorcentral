@@ -62,14 +62,28 @@ def home(request):
 
     topics = Category.objects.all()
     kb_count = kbs.count()
-    context = {'kbs': kbs, 'topics': topics, 'kb_count': kb_count}
+    kb_messages = Message.objects.all()
+
+    context = {'kbs': kbs, 'topics': topics,
+                'kb_count': kb_count, 'kb_messages': kb_messages}
     return render(request, 'base/home.html', context)
 
 
 def kb(request, pk):
     kb = Kb.objects.get(id=pk)  
     kb_messages = kb.message_set.all().order_by('-created')
-    context = {'kb': kb, 'kb_messages': kb_messages}
+    partners = kb.partners.all()
+    if request.method == 'POST':
+        message = Message.objects.create(
+            user=request.user,
+            kb=kb,
+            description=request.POST.get('description')
+        )
+        kb.partners.add(request.user)
+        return redirect('kb', pk=kb.id)
+
+    context = {'kb': kb, 'kb_messages': kb_messages,
+                'partners': partners}
     return render(request, 'base/kb.html', context)
 
 @login_required(login_url='login')
@@ -101,6 +115,7 @@ def updateKb(request, pk):
     context = {'form': form}
     return render(request, 'base/kb_form.html', context)
 
+@login_required(login_url='login')
 def deleteKb(request, pk):
     kb = Kb.objects.get (id=pk) 
 
@@ -111,3 +126,16 @@ def deleteKb(request, pk):
         kb.delete()
         return redirect('home')
     return render(request, 'base/delete.html', {'obj':kb})
+
+
+@login_required(login_url='login')
+def deleteMessage(request, pk):
+    message = Message.objects.get (id=pk) 
+
+    if request.user != message.user:
+        return HttpResponse('No estas autorizado')   
+        
+    if request.method == "POST":
+        message.delete()
+        return redirect('home')
+    return render(request, 'base/delete.html', {'obj':message})

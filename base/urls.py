@@ -10,4 +10,5 @@ urlpatterns = [
     path('create-kb/', views.createKb, name="create-kb"),
     path('update-kb/<str:pk>/', views.updateKb, name="update-kb"),
     path('delete-kb/<str:pk>/', views.deleteKb, name="delete-kb"),
+    path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
 ]
