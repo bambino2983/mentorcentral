@@ -7,3 +7,4 @@ class KbForm(ModelForm):
     class Meta:
         model = Kb
         fields = '__all__'
+        exclude = ['creator', 'partners']

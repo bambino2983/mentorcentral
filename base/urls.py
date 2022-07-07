@@ -7,6 +7,7 @@ urlpatterns = [
     path('register/', views.registerPage, name="register"),
     path('', views.home, name="home"),
     path('kb/<str:pk>/', views.kb, name="kb"),
+    path('profile/<str:pk>/', views.userProfile, name="user-profile"),
     path('create-kb/', views.createKb, name="create-kb"),
     path('update-kb/<str:pk>/', views.updateKb, name="update-kb"),
     path('delete-kb/<str:pk>/', views.deleteKb, name="delete-kb"),

@@ -9,53 +9,19 @@
 
 <div class="home-container">
   <div>
-    <h3>Browse Topics</h3>
-
-    <hr />
-
-    <div>
-      <a href="{%  url 'home' %}">All</a>
-    </div>
-    {% for topic in topics %}
-    <div>
-      <a href="{% url 'home' %}?q={{ topic.name }}">{{ topic.name }}</a>
-    </div>
-    {% endfor %}
+    {%  include 'base/category.html' %}
   </div>
 
   <div>
     <h5>{{kb_count}} Documentos disponibles</h5>
     <a href="{% url 'create-kb' %}">Crear KB</a>
-    <div>
-      {% for kb in kbs %}
-      <div>
-        {% if request.user == kb.creator %}
-        <a href="{% url 'update-kb' kb.id %}">Edit</a>
-        <a href="{% url 'delete-kb' kb.id %}">Borrar</a>
-        {% endif %}
-        <span> {{ kb.creator }} </span>
-        <h3>{{kb.id}} -- <a href="{% url 'kb' kb.id %}">{{kb.name}}</a></h3>
-        <div class="body">{{kb.description|safe}}</div>
-        <small>{{ kb.category.name }}</small>
-        <br />
-        <small>{{ kb.updated }}</small>
-        <hr />
-      </div>
-      {% endfor %}
-    </div>
+
+    {% include 'base/feed.html' %}
+
   </div>
 
   <div>
-    <h3>Recent Activity</h3>
-    <hr>
-    {% for message in kb_messages %}
-      <div>
-        <small>@{{message.user}} {{message.created|timesince}} </small>
-        <small>replied to "{{message.kb}}"</small>
-        <p>{{message|safe}}</p>
-      </div>
-    {% endfor %} 
-      
+    {% include 'base/activity.html' %}
   </div>
 
 </div>

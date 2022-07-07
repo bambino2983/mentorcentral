@@ -62,7 +62,7 @@ def home(request):
 
     topics = Category.objects.all()
     kb_count = kbs.count()
-    kb_messages = Message.objects.all()
+    kb_messages = Message.objects.filter(Q(kb__category__name__icontains=q))
 
     context = {'kbs': kbs, 'topics': topics,
                 'kb_count': kb_count, 'kb_messages': kb_messages}
@@ -86,13 +86,25 @@ def kb(request, pk):
                 'partners': partners}
     return render(request, 'base/kb.html', context)
 
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    kbs = user.kb_set.all()
+    kb_messages = user.message_set.all()
+    category = Category.objects.all()
+    context = {'user': user, 'kbs': kbs, 'kb_messages':kb_messages, 'category':category}
+    return render(request, 'base/profile.html', context)
+
+
+
 @login_required(login_url='login')
 def createKb(request):
     form = KbForm() 
     if request.method == "POST":
         form = KbForm(request.POST)
         if form.is_valid():
-            form.save()
+            kb = form.save(commit=False)
+            kb.creator = request.user
+            kb.save()
             return redirect('home')
     
     context = {'form': form}
