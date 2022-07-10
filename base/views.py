@@ -13,6 +13,9 @@ from .forms import KbForm
 
 def loginPage(request):
     page = 'login'
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -20,15 +23,16 @@ def loginPage(request):
         try:
             user = User.objects.get(username=username)
         except:
-            messages.error(request, 'User not exist')
+            messages.error(request, 'User does not exist')
 
         user = authenticate(request, username=username, password=password)
-    
+
         if user is not None:
             login(request, user)
             return redirect('home')
         else:
-             messages.error(request, 'Username or Password no existe')
+            messages.error(request, 'Username OR password does not exit')
+            
     context= {'page': page}
     return render(request, 'base/login_register.html', context)
 
@@ -99,32 +103,40 @@ def userProfile(request, pk):
 @login_required(login_url='login')
 def createKb(request):
     form = KbForm() 
+    categories = Category.objects.all()
     if request.method == "POST":
-        form = KbForm(request.POST)
-        if form.is_valid():
-            kb = form.save(commit=False)
-            kb.creator = request.user
-            kb.save()
-            return redirect('home')
+        category_name = request.POST.get('category')
+        category, created = Category.objects.get_or_create(name=category_name)
+
+        Kb.objects.create(
+            creator=request.user,
+            category=category,
+            name=request.POST.get('name'),
+            description=request.POST.get('description'),
+        )
+        return redirect('home')
     
-    context = {'form': form}
+    context = {'form': form, 'categories': categories}
     return render(request, 'base/kb_form.html', context)
 
 @login_required(login_url='login')
 def updateKb(request, pk):
     kb = Kb.objects.get (id=pk)   
     form = KbForm(instance=kb)
-
+    categories = Category.objects.all()
     if request.user != kb.creator:
         return HttpResponse('No estas autorizado')
 
     if request.method == "POST":
-        form = KbForm(request.POST, instance=kb)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        category_name = request.POST.get('category')
+        category, created = Category.objects.get_or_create(name=category_name)
+        kb.name = request.POST.get('name')
+        kb.category = category
+        kb.description = request.POST.get('description')
+        kb.save()
+        return redirect('home')
 
-    context = {'form': form}
+    context = {'form': form, 'categories': categories, 'kb': kb}
     return render(request, 'base/kb_form.html', context)
 
 @login_required(login_url='login')
