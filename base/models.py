@@ -28,7 +28,7 @@ class Kb(models.Model):
         ordering = ['-updated', '-created']
 
     def __str__(self):
-        return self.name
+        return self.description[0:50]
 
 
 class Message(models.Model):

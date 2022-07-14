@@ -6,16 +6,16 @@
       class="roomListRoom__author"
     >
       <div class="avatar avatar--small">
-        <img src="{{kb.creator.avatar.url}}" />
+        <img src="{{kb.creatpr.avatar.url}}" />
       </div>
-      <span>@{{kb.host.username}}</span>
+      <span>@{{kb.creator.username}}</span>
     </a>
     <div class="roomListRoom__actions">
       <span>{{kb.created|timesince}} ago</span>
     </div>
   </div>
   <div class="roomListRoom__content">
-    <a href="{% url 'kb' kb.id %}">{{room.name}}</a>
+    <a href="{% url 'kb' kb.id %}">{{kb.name}}</a>
   </div>
   <div class="roomListRoom__meta">
     <a href="{% url 'kb' kb.id %}" class="roomListRoom__joined">
@@ -44,21 +44,5 @@
     </a>
     <p class="roomListRoom__topic">{{kb.category.name}}</p>
   </div>
-</div>
-
-<div>
-  {% if request.user == kb.creator %}
-  <a href="{% url 'update-kb' kb.id %}">Edit</a>
-  <a href="{% url 'delete-kb' kb.id %}">Borrar</a>
-  {% endif %}
-  <a href="{% url 'user-profile' kb.creator.id %}"
-    >@{{ kb.creator.username }}</a
-  >
-  <h3>{{kb.id}} -- <a href="{% url 'kb' kb.id %}">{{kb.name}}</a></h3>
-  <div class="body">{{kb.description|safe}}</div>
-  <small>{{ kb.category.name }}</small>
-  <br />
-  <small>{{ kb.updated }}</small>
-  <hr />
 </div>
 {% endfor %}
